@@ -1,25 +1,41 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import SelectLevel from './SelectLevel';
+import Game from './Game';
 
-function App() {
+const App = () => {
+  const [level, setLevel] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
+
+  const resetGame = () => {
+    setGameOver(false)
+    setLevel(0)
+    setScore(0)
+  }
+
+  const render = () => {
+    if (level === 0) {
+      return <SelectLevel setLevel={setLevel}/>
+    }
+
+    if (gameOver) {
+      return (
+        <div className="game-over">
+          <div>GAME OVER, YOUR SCORED WAS {score}</div>
+          <div className="play-again" onClick={resetGame}>Click here to play again</div>
+        </div>
+      )
+    }
+
+    return <Game speed={level} setGameOver={setGameOver} score={score} setScore={setScore}/>
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      {render()}
     </div>
-  );
-}
+  )
+};
 
 export default App;
