@@ -4,18 +4,64 @@ const Game = ({speed, setGameOver, score, setScore}) => {
   const [snake, setSnake] = useState([[0,0]]);
   const [direction, setDirection] = useState('RIGHT');
   const [food, setFood] = useState([10, 10]);
+  const [cursor, setCursor] = useState([0, 0]);
+
+  useEffect(() => {
+    const handleMove = (event) => {
+      setCursor([event.touches[0].clientX, event.touches[0].clientY]);
+    };
+    document.addEventListener('touchmove', handleMove);
+    return () => document.removeEventListener('touchmove', handleMove);
+  }, [direction]);
 
   useEffect(() => {
     const interval = setInterval(moveSnake, speed);
     return () => clearInterval(interval);
   });
 
-  useEffect(() => {
-    document.addEventListener('keydown', changeDirection);
-    return () => document.removeEventListener('keydown', changeDirection);
-  }, [direction]);
+  // useEffect(() => {
+  //   document.addEventListener('keydown', changeDirection);
+  //   return () => document.removeEventListener('keydown', changeDirection);
+  // }, [direction]);
+
+  // const moveSnake = () => {
+  //   const snakeCopy = [...snake];
+  //   const head = snakeCopy[snakeCopy.length - 1];
+
+  //   // Move the snake in the current direction
+  //   let newHead;
+  //   if (direction === 'RIGHT') {
+  //     newHead = [head[0] + 1, head[1]];
+  //   } else if (direction === 'LEFT') {
+  //     newHead = [head[0] - 1, head[1]];
+  //   } else if (direction === 'UP') {
+  //     newHead = [head[0], head[1] - 1];
+  //   } else if (direction === 'DOWN') {
+  //     newHead = [head[0], head[1] + 1];
+  //   }
+
+  //   // Check for collision with the wall or itself
+  //   if (checkCollision(newHead)) {
+  //     // Game over
+  //     setGameOver(true);
+  //   }
+
+  //   // Check for collision with the food
+  //   if (checkFoodCollision(newHead)) {
+  //     // Snake ate the food, don't remove the tail
+  //     snakeCopy.push(newHead);
+  //   } else {
+  //     // Snake didn't eat the food, remove the tail
+  //     snakeCopy.push(newHead);
+  //     snakeCopy.shift();
+  //   }
+
+  //   setSnake(snakeCopy);
+  // };
 
   const moveSnake = () => {
+    changeDirection();
+
     const snakeCopy = [...snake];
     const head = snakeCopy[snakeCopy.length - 1];
 
@@ -34,34 +80,55 @@ const Game = ({speed, setGameOver, score, setScore}) => {
     // Check for collision with the wall or itself
     if (checkCollision(newHead)) {
       // Game over
-      setGameOver(true);
+      return;
     }
 
     // Check for collision with the food
     if (checkFoodCollision(newHead)) {
       // Snake ate the food, don't remove the tail
       snakeCopy.push(newHead);
-    } else {
+      } else {
       // Snake didn't eat the food, remove the tail
       snakeCopy.push(newHead);
       snakeCopy.shift();
+      }
+      setSnake(snakeCopy);
     }
 
-    setSnake(snakeCopy);
-  };
+  // const changeDirection = (event) => {
+  //   event.preventDefault();
+  //   if (event.keyCode === 37 && direction !== 'RIGHT') {
+  //     setDirection('LEFT');
+  //   } else if (event.keyCode === 38 && direction !== 'DOWN') {
+  //     setDirection('UP');
+  //   } else if (event.keyCode === 39 && direction !== 'LEFT') {
+  //     setDirection('RIGHT');
+  //   } else if (event.keyCode === 40 && direction !== 'UP') {
+  //     setDirection('DOWN');
+  //   }
+  // };
 
-  const changeDirection = (event) => {
-    event.preventDefault();
-    if (event.keyCode === 37 && direction !== 'RIGHT') {
-      setDirection('LEFT');
-    } else if (event.keyCode === 38 && direction !== 'DOWN') {
-      setDirection('UP');
-    } else if (event.keyCode === 39 && direction !== 'LEFT') {
-      setDirection('RIGHT');
-    } else if (event.keyCode === 40 && direction !== 'UP') {
-      setDirection('DOWN');
+  const changeDirection = () => {
+    const snakeHead = snake[snake.length - 1];
+    const dx = cursor[0] - snakeHead[0];
+    const dy = cursor[1] - snakeHead[1];
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // Snake should move horizontally
+      if (dx > 0 && direction !== 'LEFT') {
+        setDirection('RIGHT');
+      } else if (dx < 0 && direction !== 'RIGHT') {
+        setDirection('LEFT');
+      }
+    } else {
+      // Snake should move vertically
+      if (dy > 0 && direction !== 'UP') {
+        setDirection('DOWN');
+      } else if (dy < 0 && direction !== 'DOWN') {
+        setDirection('UP');
+      }
     }
   };
+
 
   const checkCollision = (newHead) => {
     if (newHead[0] < 0 || newHead[0] >= 20 || newHead[1] < 0 || newHead[1] >= 20) {
