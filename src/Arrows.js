@@ -1,4 +1,4 @@
-import Arrow from './Arrow'
+import Arrow from './Arrow';
 
 const Arrows = ({changeDirection}) => {
   return (
