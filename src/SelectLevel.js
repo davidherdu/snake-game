@@ -13,7 +13,9 @@ const SelectLevel = ({setLevel}) => {
   return (
     <div className="select-level">
       <h2>Select level</h2>
-      {renderLevels()}
+      <div className="levels">
+        {renderLevels()}
+      </div>
     </div>
   )
 }

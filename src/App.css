@@ -30,18 +30,25 @@
 
 .select-level {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
+  gap: 20px;
+}
+
+.levels {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
 
 .level {
   cursor: pointer;
-  border: 2px solid black;
-  border-radius: 4px;
-  padding: 3px;
-  color: white;
-  background-color: blue;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
 }
 
 .game-over {
@@ -53,4 +60,8 @@
 
 .play-again {
   cursor: pointer;
+}
+
+@media (max-width: 400px) {
+  .levels { grid-template-columns: repeat(2, 1fr); }
 }
