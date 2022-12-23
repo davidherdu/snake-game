@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Arrows from './Arrows';
 
 const Game = ({speed, setGameOver, score, setScore}) => {
   const [snake, setSnake] = useState([[0,0]]);
@@ -102,6 +103,18 @@ const Game = ({speed, setGameOver, score, setScore}) => {
     setScore(score + 1);
   };
 
+  const changeDirectionWithArrows = (direction) => {
+    if (direction === 'LEFT' && direction !== 'RIGHT') {
+      setDirection('LEFT');
+    } else if (direction === 'UP' && direction !== 'DOWN') {
+      setDirection('UP');
+    } else if (direction === 'RIGHT' && direction !== 'LEFT') {
+      setDirection('RIGHT');
+    } else if (direction === 'DOWN' && direction !== 'UP') {
+      setDirection('DOWN');
+    }
+  }
+
   return (
     <div className="App">
       <h1>Snake</h1>
@@ -118,6 +131,7 @@ const Game = ({speed, setGameOver, score, setScore}) => {
           style={{ top: `${food[1] * 20}px`, left: `${food[0] * 20}px` }}
         />
       </div>
+      <Arrows changeDirection={changeDirectionWithArrows}/>
       <h2>Score: {score}</h2>
       <h2>Level: {10 - (speed / 100) + 1}</h2>
     </div>
