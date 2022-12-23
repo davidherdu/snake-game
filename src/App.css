@@ -6,6 +6,12 @@
   transform: translate(-50%, -50%);
 }
 
+.game-info {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
 .game-board {
   position: relative;
   width: 400px;

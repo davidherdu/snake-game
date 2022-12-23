@@ -117,7 +117,10 @@ const Game = ({speed, setGameOver, score, setScore}) => {
 
   return (
     <div className="App">
-      <h1>Snake</h1>
+      <div className="game-info">
+        <h2>Level: {10 - (speed / 100) + 1}</h2>
+        <h2>Score: {score}</h2>
+      </div>
       <div className="game-board">
         {snake.map(([x, y], index) => (
           <div
@@ -132,8 +135,6 @@ const Game = ({speed, setGameOver, score, setScore}) => {
         />
       </div>
       <Arrows changeDirection={changeDirectionWithArrows}/>
-      <h2>Score: {score}</h2>
-      <h2>Level: {10 - (speed / 100) + 1}</h2>
     </div>
   );
 };
